@@ -30,8 +30,29 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  wedding_name: "Jack & Jill's Wedding"
+  errors:
+    format: '%{message}'
+  wedding_name: "Jack & Jills Hochzeit"
   wedding_couple_names: 'Jack & Jill'
-  wedding_date: 'Saturday, 1 January 2000'
-  wedding_location: 'South Pole'
-  photo_credits: 'Photo Credits: Pexels'
+  wedding_date: 'Samstag, 1. Januar 2000'
+  wedding_location: 'Südpol'
+  photo_credits: 'Bildnachweis: Pexels'
+  activerecord:
+    errors:
+      models:
+        guest:
+          attributes:
+            email:
+              taken: 'Diese E-Mail-Adresse ist bereits registriert'
+              blank: 'Bitte gib deine E-Mail-Adresse an'
+              invalid: 'Bitte gib eine gültige E-Mail-Adresse an'
+            first_name:
+              blank: 'Bitte gib deinen Vornamen an'
+            last_name:
+              blank: 'Bitte gib deinen Nachnamen an'
+        plus_one:
+          attributes:
+            first_name:
+              blank: 'Bitte gib den Vornamen an'
+            last_name:
+              blank: 'Bitte gib den Nachnamen an'

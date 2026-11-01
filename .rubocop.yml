@@ -2,7 +2,9 @@ AllCops:
   Exclude:
     - 'bin/*'
     - 'db/schema.rb'
+    - 'vendor/**/*'
   NewCops: enable
+  SuggestExtensions: false
 
 Style/ClassAndModuleChildren:
   Exclude:
@@ -18,6 +20,20 @@ Style/Documentation:
     - 'db/**/*'
     - 'test/**/*'
 
+# Config DSL blocks (environments, ActiveAdmin resources) and tests read
+# better as one long block; do not enforce artificial limits there.
+Metrics/BlockLength:
+  Exclude:
+    - 'app/admin/**/*'
+    - 'config/environments/**/*'
+    - 'test/**/*'
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
 Layout/LineLength:
   Max: 80
-  IgnoredPatterns: ['\A\s*#']
+  AllowedPatterns: ['\A\s*#']

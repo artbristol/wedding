@@ -20,3 +20,12 @@
 .DS_Store
 
 /development.env
+
+# Production/deployment env files (secrets) — never commit
+/.env*
+
+# Bundled gems (local dev installs)
+/vendor/bundle
+
+# Precompiled assets
+/public/assets

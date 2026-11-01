@@ -11,7 +11,7 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
       guest: { email: guest_two.email }
     }
 
-    assert_select 'li', 'Email has already been taken'
+    assert_select 'li', 'Diese E-Mail-Adresse ist bereits registriert'
   end
 
   test 'records confirmed_at time' do
@@ -21,5 +21,29 @@ class GuestsControllerTest < ActionDispatch::IntegrationTest
 
     guest_one.reload
     assert guest_one.confirmed_at
+  end
+end
+
+class GuestsControllerTurnstileTest < ActionDispatch::IntegrationTest
+  test 'rejects submission without token when turnstile is configured' do
+    ENV['TURNSTILE_SECRET_KEY'] = 'test-secret'
+    begin
+      assert_no_difference 'Guest.count' do
+        post guests_path, params: { guest: { email: 'bot@example.com' } }
+      end
+      assert_response :success
+      assert_select 'li', 'Bitte bestätige, dass du kein Roboter bist.'
+    ensure
+      ENV['TURNSTILE_SECRET_KEY'] = nil
+    end
+  end
+
+  test 'skips verification when turnstile is not configured' do
+    assert ENV['TURNSTILE_SECRET_KEY'].blank?
+    assert_difference 'Guest.count', 1 do
+      post guests_path,
+           params: { guest: { email: 'human@example.com', first_name: 'A',
+                              last_name: 'B' } }
+    end
   end
 end

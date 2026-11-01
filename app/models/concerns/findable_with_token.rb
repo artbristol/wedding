@@ -6,7 +6,7 @@
 module FindableWithToken
   extend ActiveSupport::Concern
 
-  ID_TOKEN_RX = /\A(\d+)-(\w+)\z/.freeze
+  ID_TOKEN_RX = /\A(\d+)-(\w+)\z/
 
   included do
     has_secure_token

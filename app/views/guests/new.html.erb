@@ -2,7 +2,7 @@
   <div class="row">
     <div class="offset-lg-2 col-lg-8">
       <%= render partial: 'leader' %>
-      <p>Please enter your email address to begin. We'll send you an email with important information once you have RSVP'd.</p>
+      <p>Gib zuerst deine E-Mail-Adresse ein. Sobald du deine Rückmeldung abgeschickt hast, schicken wir dir eine E-Mail mit allen wichtigen Informationen.</p>
       <%= form_with scope: :guest, url: guests_path, local: true do |form| %>
       <div class="row">
         <div class="col-md-12">
@@ -12,7 +12,7 @@
 
       <div class="form-group row">
         <div class="col-md-3">
-          <%= form.label :email, class: 'col-form-label' %>
+          <%= form.label :email, 'E-Mail', class: 'col-form-label' %>
         </div>
         <div class="col-md-9">
           <%= form.email_field :email, id: 'guest_email', class: 'form-control', autofocus: true, required: true %>
@@ -21,12 +21,13 @@
 
       <div class="row guests-buttons">
         <div class="offset-md-3 col-md-6 text-center">
-          <%- if ENV['RECAPTCHA_SECRET_KEY'].blank? -%>
-          <%= form.submit 'Continue', class: 'btn btn-primary', data: { disable_with: 'Sending...' } %>
-          <%- else -%>
-          <%= invisible_recaptcha_tags text: 'Continue', class: 'btn btn-primary', data: { disable_with: 'Sending...' } %>
+          <%- if ENV['TURNSTILE_SITE_KEY'].present? -%>
+          <div class="cf-turnstile" data-sitekey="<%= ENV['TURNSTILE_SITE_KEY'] %>" data-action="rsvp"></div>
+          <%= javascript_include_tag 'https://challenges.cloudflare.com/turnstile/v0/api.js', async: true, defer: true %>
           <%- end -%>
+          <%= form.submit 'Weiter', class: 'btn btn-primary', data: { disable_with: 'Senden...' } %>
         </div>
+      </div>
       </div>
       <% end %>
     </div>

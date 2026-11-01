@@ -1,0 +1,16 @@
+[Unit]
+Description=Wedding Rails app (Puma)
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+User=art
+WorkingDirectory=/home/art/wedding
+EnvironmentFile=/home/art/wedding/.env.production
+ExecStart=/home/art/wedding/bin/puma -C config/puma.rb -b tcp://127.0.0.1:3000
+Restart=always
+RestartSec=3
+TimeoutStopSec=20
+
+[Install]
+WantedBy=multi-user.target

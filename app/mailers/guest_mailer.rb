@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 class GuestMailer < ApplicationMailer
-  default from: ENV['FROM_EMAIL'], reply_to: ENV['CONTACT_EMAIL']
+  default from: ENV.fetch('FROM_EMAIL', nil),
+          reply_to: ENV.fetch('CONTACT_EMAIL', nil)
 
   def confirmation_email(guest)
     @guest = guest

@@ -108,6 +108,24 @@ docker-compose exec web bash
 
 Once you have a shell in the container, you can run rails commands as normal.
 
+### Local Setup (without Docker)
+
+Requires Ruby 3.3 (see `.ruby-version`) and PostgreSQL 15+.
+
+```
+git clone https://github.com/jdleesmiller/wedding.git
+cd wedding
+bin/setup
+```
+
+`bin/setup` installs dependencies and prepares the database. It assumes you
+can connect to PostgreSQL as your current OS user over the local unix socket
+(peer authentication); to use a different role/host, set `DB_HOST`, `DB_USER`
+and `DB_PASSWORD` (see `config/database.yml`). Copy
+`development.env.template` to `development.env` and export it (or run under
+docker-compose, which loads it automatically) to configure the mailer and
+canonical host.
+
 ```
 bin/rails console
 bin/rails test
@@ -169,9 +187,11 @@ You can of course customize everything by changing the code, but here are some u
 
 ## Environment Variables
 
-- `CANONICAL_URL` &mdash; your website's domain, e.g. `www.mywedding.com`
+- `CANONICAL_HOST` &mdash; your website's domain, e.g. `www.mywedding.com`; requests to other hostnames are redirected here, and links in emails use it
+- `CANONICAL_HOST_PROTOCOL` &mdash; scheme used for links in emails (default `https`)
 - `CONTACT_EMAIL` &mdash; the email address that users can use to contact you, e.g. `info@mywedding.com`
 - `FROM_EMAIL` &mdash; the email address that confirmations emails will come from
+- `RAILS_SERVE_STATIC_FILES` &mdash; set to `1` for Rails to serve the compiled assets in `public/` itself; required unless a web server or CDN serves them directly (the bundled Dockerfile sets it)
 
 ### Sending Email
 
@@ -193,6 +213,11 @@ If set, the website will use an invisible reCAPTCHA to prevent spam. You can get
 - `RECAPTCHA_SECRET_KEY` &mdash; the `secret` for the Server side integration
 
 ## Deployment
+
+For a bare-metal deployment on a small VM (Debian + systemd + Caddy), see
+[`deploy/README.md`](deploy/README.md).
+
+### Heroku
 
 Heroku makes it easy to deploy rails apps like this one. The free postgres database is enough, unless you have &gt; 10k guests! You can set up a Heroku app and connect it to your GitHub repo.
 

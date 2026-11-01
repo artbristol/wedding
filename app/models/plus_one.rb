@@ -4,6 +4,8 @@
 # An extra guest.
 #
 class PlusOne < ApplicationRecord
+  include RansackAllowlist
+
   belongs_to :guest
 
   auto_strip_attributes :first_name, :last_name, :diet

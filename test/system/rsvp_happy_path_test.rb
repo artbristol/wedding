@@ -5,46 +5,46 @@ require 'application_system_test_case'
 class RsvpHappyPathTest < ApplicationSystemTestCase
   test 'RSVP attending' do
     visit root_url
-    click_link 'RSVP TODAY!', match: :first
+    click_link 'Jetzt RSVP senden!', match: :first
 
-    fill_in 'Email', with: 'test@example.com'
-    click_on 'Continue'
+    fill_in 'E-Mail', with: 'test@example.com'
+    click_on 'Weiter'
 
     #
     # About You
     #
-    fill_in 'First Name', with: 'Test'
-    fill_in 'Last Name', with: 'User'
-    choose 'Yes'
-    fill_in 'Dietary Preferences', with: 'Level 5 Vegan'
-    fill_in 'Song Suggestions', with: 'Mozart'
-    click_on 'Continue'
+    fill_in 'Vorname', with: 'Test'
+    fill_in 'Nachname', with: 'User'
+    choose 'Ja'
+    fill_in 'Essenswünsche', with: 'Level 5 Vegan'
+    fill_in 'Songwünsche', with: 'Mozart'
+    click_on 'Weiter'
 
     #
     # Plus Ones
     #
-    click_on 'Add Plus One'
+    click_on 'Begleitung hinzufügen'
 
-    fill_in 'First Name', with: 'Test Plus'
-    fill_in 'Last Name', with: 'One Name'
-    fill_in 'Dietary Preferences', with: 'Vegetarian'
-    check 'Child'
-    click_on 'Add Plus One'
+    fill_in 'Vorname', with: 'Test Plus'
+    fill_in 'Nachname', with: 'One Name'
+    fill_in 'Essenswünsche', with: 'Vegetarian'
+    check 'Kind (12 Jahre oder jünger)'
+    click_on 'Begleitung hinzufügen'
 
     assert page.has_content? 'Test Plus One Name'
 
-    click_on 'Add Plus One'
+    click_on 'Begleitung hinzufügen'
 
-    fill_in 'First Name', with: 'Test Plus'
-    fill_in 'Last Name', with: 'Two Name'
-    fill_in 'Dietary Preferences', with: 'Pescatarian'
-    check 'Child'
-    click_on 'Add Plus One'
+    fill_in 'Vorname', with: 'Test Plus'
+    fill_in 'Nachname', with: 'Two Name'
+    fill_in 'Essenswünsche', with: 'Pescatarian'
+    check 'Kind (12 Jahre oder jünger)'
+    click_on 'Begleitung hinzufügen'
 
     assert page.has_content? 'Test Plus One Name'
     assert page.has_content? 'Test Plus Two Name'
 
-    click_on 'Continue'
+    click_on 'Weiter'
 
     #
     # Confirm
@@ -60,7 +60,7 @@ class RsvpHappyPathTest < ApplicationSystemTestCase
 
     fill_in 'guest[notes]', with: 'I hope there is cake!'
 
-    click_on 'Complete RSVP'
+    click_on 'RSVP abschicken'
 
     assert_equal 1, ActionMailer::Base.deliveries.size
     email = ActionMailer::Base.deliveries.last
@@ -69,27 +69,27 @@ class RsvpHappyPathTest < ApplicationSystemTestCase
 
   test 'RSVP not attending' do
     visit root_url
-    click_link 'RSVP TODAY!', match: :first
+    click_link 'Jetzt RSVP senden!', match: :first
 
-    fill_in 'Email', with: 'test@example.com'
-    click_on 'Continue'
+    fill_in 'E-Mail', with: 'test@example.com'
+    click_on 'Weiter'
 
     #
     # About You
     #
-    fill_in 'First Name', with: 'Test'
-    fill_in 'Last Name', with: 'User'
-    choose 'No'
+    fill_in 'Vorname', with: 'Test'
+    fill_in 'Nachname', with: 'User'
+    choose 'Nein'
 
-    click_on 'Continue'
+    click_on 'Weiter'
 
     #
     # Skip to Confirm
     #
     assert page.has_content? 'Test User'
-    assert page.has_content? 'Sorry to hear'
+    assert page.has_content? 'Schade, dass du nicht dabei'
 
-    click_on 'Complete RSVP'
+    click_on 'RSVP abschicken'
 
     assert_equal 1, ActionMailer::Base.deliveries.size
     email = ActionMailer::Base.deliveries.last
@@ -98,27 +98,27 @@ class RsvpHappyPathTest < ApplicationSystemTestCase
 
   test 'Sends RSVP update email' do
     visit root_url
-    click_link 'RSVP TODAY!', match: :first
+    click_link 'Jetzt RSVP senden!', match: :first
 
-    fill_in 'Email', with: 'test@example.com'
-    click_on 'Continue'
+    fill_in 'E-Mail', with: 'test@example.com'
+    click_on 'Weiter'
 
-    fill_in 'First Name', with: 'Test'
-    fill_in 'Last Name', with: 'User'
+    fill_in 'Vorname', with: 'Test'
+    fill_in 'Nachname', with: 'User'
 
-    click_on 'Continue'
-    click_on 'Continue' # No plus ones
-    click_on 'Complete RSVP'
+    click_on 'Weiter'
+    click_on 'Weiter' # No plus ones
+    click_on 'RSVP abschicken'
 
     assert_equal 1, ActionMailer::Base.deliveries.size
 
     visit root_url
-    click_link 'RSVP TODAY!', match: :first
+    click_link 'Jetzt RSVP senden!', match: :first
 
-    fill_in 'Email', with: 'test@example.com'
-    click_on 'Continue'
+    fill_in 'E-Mail', with: 'test@example.com'
+    click_on 'Weiter'
 
-    assert page.has_content? 'Welcome Back'
+    assert page.has_content? 'Willkommen zurück'
 
     assert_equal 2, ActionMailer::Base.deliveries.size
     email = ActionMailer::Base.deliveries.last

@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 module ApplicationHelper
+  FLASH_CLASSES = {
+    notice: 'alert alert-info',
+    success: 'alert alert-success',
+    error: 'alert alert-error',
+    alert: 'alert alert-error'
+  }.freeze
+
   def flash_class(key)
-    case key
-    when :notice then 'alert alert-info'
-    when :success then 'alert alert-success'
-    when :error then 'alert alert-error'
-    when :alert then 'alert alert-error'
-    end
+    FLASH_CLASSES[key]
   end
 
   def errors_for(object)
@@ -15,7 +17,9 @@ module ApplicationHelper
 
     content_tag(:div, class: 'mb-3 card border-danger') do
       concat(content_tag(:div, class: 'card-header bg-danger text-white') do
-        concat "Oops, #{pluralize(object.errors.count, 'problem')}:"
+        count = object.errors.count
+        problems = count == 1 ? 'ein Problem' : "#{count} Probleme"
+        concat "Hoppla, #{problems}:"
       end)
       concat(content_tag(:ul, class: 'mb-0 list-group list-group-flush') do
         object.errors.full_messages.each do |msg|

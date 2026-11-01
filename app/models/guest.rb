@@ -4,6 +4,8 @@
 # A primary guest.
 #
 class Guest < ApplicationRecord
+  include RansackAllowlist
+
   include FindableWithToken
 
   auto_strip_attributes :email, :first_name, :last_name, :diet, :songs, :notes
@@ -26,10 +28,10 @@ class Guest < ApplicationRecord
 
   # Don't allow long or odd names in emails; may be spam.
   def email_safe_salutation
-    return 'Hello,' if
+    return 'Hallo,' if
       first_name.blank? || first_name !~ /\A[\p{Word}\s'-]{1,30}\z/i
 
-    "Dear #{first_name},"
+    "Hallo #{first_name},"
   end
 
   validates :diet, length: { maximum: 8192 }
